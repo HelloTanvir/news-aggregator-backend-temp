@@ -14,7 +14,7 @@ export class UserService {
         private readonly utilsService: UtilsService
     ) {}
 
-    async create(createUserDto: CreateUserDto): Promise<User> {
+    async createUser(createUserDto: CreateUserDto): Promise<User> {
         const hashedPassword = await this.utilsService.hashString(createUserDto.password);
 
         const user = new User({
