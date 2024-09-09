@@ -1,15 +1,22 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { AuthModule } from './auth/auth.module';
+import { AtGuard } from './auth/guards/access-token.guard';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { AtGuard } from './common/guards/access-token.guard';
 import { ResponseTransformInterceptor } from './common/interceptors/response-transform.interceptor';
 import { DBModule } from './db/db.module';
 import { UserModule } from './user/user.module';
 import { UtilsModule } from './utils/utils.module';
 
 @Module({
-    imports: [ConfigModule.forRoot({ isGlobal: true }), DBModule, UserModule, UtilsModule],
+    imports: [
+        ConfigModule.forRoot({ isGlobal: true }),
+        DBModule,
+        UserModule,
+        UtilsModule,
+        AuthModule,
+    ],
     providers: [
         {
             provide: APP_GUARD,
