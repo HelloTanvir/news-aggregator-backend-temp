@@ -13,9 +13,9 @@ import { UtilsModule } from './utils/utils.module';
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
         DBModule,
+        AuthModule,
         UserModule,
         UtilsModule,
-        AuthModule,
     ],
     providers: [
         {
