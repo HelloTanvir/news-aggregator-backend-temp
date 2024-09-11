@@ -1,11 +1,11 @@
-ARG NODE_VERSION=20.11.1
+ARG NODE_VERSION=20.17.0
 
 FROM node:${NODE_VERSION}-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package.json .
-COPY yarn.lock .
+COPY package.json ./
+COPY yarn.lock ./
 
 ARG NODE_ENV
 ENV NODE_ENV=${NODE_ENV}

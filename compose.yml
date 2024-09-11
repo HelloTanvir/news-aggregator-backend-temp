@@ -1,6 +1,10 @@
+version: '3.9'
+
 services:
     app:
-        build: .
+        build:
+            context: .
+            dockerfile: Dockerfile
         container_name: news-aggregator-app
         env_file:
             - .env
@@ -41,7 +45,6 @@ services:
         container_name: news-aggregator-elasticsearch
         environment:
             - discovery.type=single-node
-            - ES_JAVA_OPTS=-Xms512m -Xmx512m
         volumes:
             - es-data:/usr/share/elasticsearch/data
         ports:
