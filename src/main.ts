@@ -20,8 +20,8 @@ async function bootstrap() {
     );
 
     const options = new DocumentBuilder()
-        .setTitle('New Aggregator APIs')
-        .setDescription('API endpoints for managing news aggregator and recommendation system.')
+        .setTitle('News Aggregator APIs')
+        .setDescription('API endpoints for managing news aggregator and subscription system.')
         .setVersion('1.0.0')
         .addBearerAuth()
         .build();
