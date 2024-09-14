@@ -7,16 +7,9 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { ResponseTransformInterceptor } from './common/interceptors/response-transform.interceptor';
 import { DBModule } from './db/db.module';
 import { UserModule } from './user/user.module';
-import { UtilsModule } from './utils/utils.module';
 
 @Module({
-    imports: [
-        ConfigModule.forRoot({ isGlobal: true }),
-        DBModule,
-        AuthModule,
-        UserModule,
-        UtilsModule,
-    ],
+    imports: [ConfigModule.forRoot({ isGlobal: true }), DBModule, AuthModule, UserModule],
     providers: [
         {
             provide: APP_GUARD,

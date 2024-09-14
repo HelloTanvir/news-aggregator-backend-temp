@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager, QueryFailedError } from 'typeorm';
-import { UtilsService } from '../utils/utils.service';
+import { HashService } from '../common/services/hash.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -11,11 +11,11 @@ export class UserService {
     constructor(
         @InjectEntityManager()
         private readonly entityManager: EntityManager,
-        private readonly utilsService: UtilsService
+        private readonly hashService: HashService
     ) {}
 
     async createUser(createUserDto: CreateUserDto): Promise<User> {
-        const hashedPassword = await this.utilsService.hashString(createUserDto.password);
+        const hashedPassword = await this.hashService.hashString(createUserDto.password);
 
         const user = new User({
             name: createUserDto.name,

@@ -3,8 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager, QueryFailedError } from 'typeorm';
+import { HashService } from '../common/services/hash.service';
 import { UserService } from '../user/user.service';
-import { UtilsService } from '../utils/utils.service';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { SignUpDto } from './dto/signup.dto';
@@ -17,7 +17,7 @@ export class AuthService {
         private readonly configService: ConfigService,
         private readonly jwtService: JwtService,
         private readonly userService: UserService,
-        private readonly utilsService: UtilsService,
+        private readonly hashService: HashService,
         @InjectEntityManager()
         private readonly entityManager: EntityManager
     ) {}
@@ -35,7 +35,7 @@ export class AuthService {
         });
 
         const tokens = await this.getTokens(user.id);
-        const hashedRefreshToken = await this.utilsService.hashString(tokens.refresh_token);
+        const hashedRefreshToken = await this.hashService.hashString(tokens.refresh_token);
 
         const auth = new Auth({ user, refreshToken: hashedRefreshToken });
 
@@ -67,7 +67,7 @@ export class AuthService {
 
         const { user } = auth;
 
-        const isPasswordMatch = await this.utilsService.compareWithHash(
+        const isPasswordMatch = await this.hashService.compareWithHash(
             loginDto.password,
             user.password
         );
@@ -77,7 +77,7 @@ export class AuthService {
 
         const expiresIn = loginDto.remember ? '30d' : '15m';
         const tokens = await this.getTokens(user.id, expiresIn);
-        const hashedRefreshToken = await this.utilsService.hashString(tokens.refresh_token);
+        const hashedRefreshToken = await this.hashService.hashString(tokens.refresh_token);
 
         auth.refreshToken = hashedRefreshToken;
         await this.entityManager.save(auth);
@@ -106,11 +106,11 @@ export class AuthService {
             where: { user: { id: userId } },
             relations: { user: true },
         });
-        if (!auth || !auth.refreshToken) {
+        if (!auth?.refreshToken) {
             throw new ForbiddenException('invalid credentials');
         }
 
-        const isRefreshTokenMatch = await this.utilsService.compareWithHash(
+        const isRefreshTokenMatch = await this.hashService.compareWithHash(
             refreshTokenDto.refreshToken,
             auth.refreshToken
         );
@@ -119,7 +119,7 @@ export class AuthService {
         }
 
         const tokens = await this.getTokens(userId);
-        const hashedRefreshToken = await this.utilsService.hashString(tokens.refresh_token);
+        const hashedRefreshToken = await this.hashService.hashString(tokens.refresh_token);
 
         auth.refreshToken = hashedRefreshToken;
         await this.entityManager.save(auth);
