@@ -6,10 +6,17 @@ import { AtGuard } from './auth/guards/access-token.guard';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { ResponseTransformInterceptor } from './common/interceptors/response-transform.interceptor';
 import { DBModule } from './db/db.module';
+import { ScraperModule } from './scraper/scraper.module';
 import { UserModule } from './user/user.module';
 
 @Module({
-    imports: [ConfigModule.forRoot({ isGlobal: true }), DBModule, AuthModule, UserModule],
+    imports: [
+        ConfigModule.forRoot({ isGlobal: true }),
+        DBModule,
+        AuthModule,
+        UserModule,
+        ScraperModule,
+    ],
     providers: [
         {
             provide: APP_GUARD,
